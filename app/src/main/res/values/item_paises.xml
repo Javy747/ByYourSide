@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="paises">
+        <item>País del Comercio</item>
+        <item>País de Origen del Producto</item>
+        <item>Afganistán</item>
+        <item>Albania</item>
+        <item>Alemania</item>
+        <item>Andorra</item>
+        <item>Angola</item>
+        <item>Antigua y Barbuda</item>
+        <item>Arabia Saudita</item>
+        <item>Argelia</item>
+        <item>Argentina</item>
+        <item>Armenia</item>
+        <item>Australia</item>
+        <item>Austria</item>
+        <item>Azerbaiyán</item>
+        <item>Bahamas</item>
+        <item>Bangladés</item>
+        <item>Barbados</item>
+        <item>Baréin</item>
+        <item>Bélgica</item>
+        <item>Belice</item>
+        <item>Benín</item>
+        <item>Bielorrusia</item>
+        <item>Birmania (Myanmar)</item>
+        <item>Bolivia</item>
+        <item>Bosnia y Herzegovina</item>
+        <item>Botsuana</item>
+        <item>Brasil</item>
+        <item>Brunéi</item>
+        <item>Bulgaria</item>
+        <item>Burkina Faso</item>
+        <item>Burundi</item>
+        <item>Bután</item>
+        <item>Cabo Verde</item>
+        <item>Camboya</item>
+        <item>Camerún</item>
+        <item>Canadá</item>
+        <item>Catar</item>
+        <item>Chad</item>
+        <item>Chile</item>
+        <item>China</item>
+        <item>Chipre</item>
+        <item>Colombia</item>
+        <item>Comoras</item>
+        <item>Corea del Norte</item>
+        <item>Corea del Sur</item>
+        <item>Costa de Marfil</item>
+        <item>Costa Rica</item>
+        <item>Croacia</item>
+        <item>Cuba</item>
+        <item>Dinamarca</item>
+        <item>Dominica</item>
+        <item>Ecuador</item>
+        <item>Egipto</item>
+        <item>El Salvador</item>
+        <item>Emiratos Árabes Unidos</item>
+        <item>Eritrea</item>
+        <item>Eslovaquia</item>
+        <item>Eslovenia</item>
+        <item>España</item>
+        <item>Estados Unidos</item>
+        <item>Estonia</item>
+        <item>Esuatini</item>
+        <item>Etiopía</item>
+        <item>Filipinas</item>
+        <item>Finlandia</item>
+        <item>Fiyi</item>
+        <item>Francia</item>
+        <item>Gabón</item>
+        <item>Gambia</item>
+        <item>Georgia</item>
+        <item>Ghana</item>
+        <item>Granada</item>
+        <item>Grecia</item>
+        <item>Guatemala</item>
+        <item>Guinea</item>
+        <item>Guinea-Bisáu</item>
+        <item>Guinea Ecuatorial</item>
+        <item>Guyana</item>
+        <item>Haití</item>
+        <item>Honduras</item>
+        <item>Hungría</item>
+        <item>India</item>
+        <item>Indonesia</item>
+        <item>Irak</item>
+        <item>Irán</item>
+        <item>Irlanda</item>
+        <item>Islandia</item>
+        <item>Islas Marshall</item>
+        <item>Islas Salomón</item>
+        <item>Israel</item>
+        <item>Italia</item>
+        <item>Jamaica</item>
+        <item>Japón</item>
+        <item>Jordania</item>
+        <item>Kazajistán</item>
+        <item>Kenia</item>
+        <item>Kirguistán</item>
+        <item>Kiribati</item>
+        <item>Kuwait</item>
+        <item>Laos</item>
+        <item>Lesoto</item>
+        <item>Letonia</item>
+        <item>Líbano</item>
+        <item>Liberia</item>
+        <item>Libia</item>
+        <item>Liechtenstein</item>
+        <item>Lituania</item>
+        <item>Luxemburgo</item>
+        <item>Madagascar</item>
+        <item>Malasia</item>
+        <item>Malaui</item>
+        <item>Maldivas</item>
+        <item>Malí</item>
+        <item>Malta</item>
+        <item>Marruecos</item>
+        <item>Mauricio</item>
+        <item>Mauritania</item>
+        <item>México</item>
+        <item>Micronesia</item>
+        <item>Moldavia</item>
+        <item>Mónaco</item>
+        <item>Mongolia</item>
+        <item>Montenegro</item>
+        <item>Mozambique</item>
+        <item>Namibia</item>
+        <item>Nauru</item>
+        <item>Nepal</item>
+        <item>Nicaragua</item>
+        <item>Níger</item>
+        <item>Nigeria</item>
+        <item>Noruega</item>
+        <item>Nueva Zelanda</item>
+        <item>Omán</item>
+        <item>Países Bajos</item>
+        <item>Pakistán</item>
+        <item>Palaos</item>
+        <item>Palestina</item>
+        <item>Panamá</item>
+        <item>Papúa Nueva Guinea</item>
+        <item>Paraguay</item>
+        <item>Perú</item>
+        <item>Polonia</item>
+        <item>Portugal</item>
+        <item>Reino Unido</item>
+        <item>República Centroafricana</item>
+        <item>República Checa</item>
+        <item>República Democrática del Congo</item>
+        <item>República Dominicana</item>
+        <item>Ruanda</item>
+        <item>Rumanía</item>
+        <item>Rusia</item>
+        <item>Samoa</item>
+        <item>San Cristóbal y Nieves</item>
+        <item>San Marino</item>
+        <item>San Vicente y las Granadinas</item>
+        <item>Santa Lucía</item>
+        <item>Santo Tomé y Príncipe</item>
+        <item>Senegal</item>
+        <item>Serbia</item>
+        <item>Seychelles</item>
+        <item>Sierra Leona</item>
+        <item>Singapur</item>
+        <item>Siria</item>
+        <item>Somalia</item>
+        <item>Sri Lanka</item>
+        <item>Sudáfrica</item>
+        <item>Sudán</item>
+        <item>Sudán del Sur</item>
+        <item>Suecia</item>
+        <item>Suiza</item>
+        <item>Surinam</item>
+        <item>Tailandia</item>
+        <item>Tanzania</item>
+        <item>Tayikistán</item>
+        <item>Timor Oriental</item>
+        <item>Togo</item>
+        <item>Tonga</item>
+        <item>Trinidad y Tobago</item>
+        <item>Túnez</item>
+        <item>Turkmenistán</item>
+        <item>Turquía</item>
+        <item>Tuvalu</item>
+        <item>Ucrania</item>
+        <item>Uganda</item>
+        <item>Uruguay</item>
+        <item>Uzbekistán</item>
+        <item>Vanuatu</item>
+        <item>Vaticano</item>
+        <item>Venezuela</item>
+        <item>Vietnam</item>
+        <item>Yemen</item>
+        <item>Yibuti</item>
+        <item>Zambia</item>
+        <item>Zimbabue</item>
+    </string-array>
+
+    <string-array name="provincias">
+        <item>Provincia</item>
+        <item>Álava</item>
+        <item>Albacete</item>
+        <item>Alicante</item>
+        <item>Almería</item>
+        <item>Asturias</item>
+        <item>Ávila</item>
+        <item>Badajoz</item>
+        <item>Barcelona</item>
+        <item>Burgos</item>
+        <item>Cáceres</item>
+        <item>Cádiz</item>
+        <item>Castellón</item>
+        <item>Ciudad Real</item>
+        <item>Córdoba</item>
+        <item>A Coruña</item>
+        <item>Cuenca</item>
+        <item>Girona</item>
+        <item>Granada</item>
+        <item>Guadalajara</item>
+        <item>Guipúzcoa</item>
+        <item>Huelva</item>
+        <item>Huesca</item>
+        <item>Illes Balears</item>
+        <item>Jaén</item>
+        <item>La Rioja</item>
+        <item>Las Palmas</item>
+        <item>León</item>
+        <item>Lleida</item>
+        <item>Lugo</item>
+        <item>Madrid</item>
+        <item>Málaga</item>
+        <item>Murcia</item>
+        <item>Navarra</item>
+        <item>Ourense</item>
+        <item>Palencia</item>
+        <item>Pontevedra</item>
+        <item>Salamanca</item>
+        <item>Santa Cruz de Tenerife</item>
+        <item>Segovia</item>
+        <item>Sevilla</item>
+        <item>Soria</item>
+        <item>Tarragona</item>
+        <item>Teruel</item>
+        <item>Toledo</item>
+        <item>Valencia</item>
+        <item>Valladolid</item>
+        <item>Vizcaya</item>
+        <item>Zamora</item>
+        <item>Zaragoza</item>
+    </string-array>
+
+    <string-array name="municipios">
+        <item>Municipio</item>
+        <item>Acebeda, La</item>
+        <item>Ajalvir</item>
+        <item>Alameda del Valle</item>
+        <item>Álamo, El</item>
+        <item>Alcalá de Henares</item>
+        <item>Alcobendas</item>
+        <item>Alcorcón</item>
+        <item>Aldea del Fresno</item>
+        <item>Algete</item>
+        <item>Alpedrete</item>
+        <item>Ambite</item>
+        <item>Anchuelo</item>
+        <item>Aranjuez</item>
+        <item>Arganda del Rey</item>
+        <item>Arroyomolinos</item>
+        <item>Batres</item>
+        <item>Becerril de la Sierra</item>
+        <item>Belmonte de Tajo</item>
+        <item>Boadilla del Monte</item>
+        <item>Boalo, El</item>
+        <item>Brunete</item>
+        <item>Buitrago del Lozoya</item>
+        <item>Bustarviejo</item>
+        <item>Cabrera, La</item>
+        <item>Cadalso de los Vidrios</item>
+        <item>Camarma de Esteruelas</item>
+        <item>Campo Real</item>
+        <item>Canencia</item>
+        <item>Carabaña</item>
+        <item>Casarrubuelos</item>
+        <item>Cenicientos</item>
+        <item>Cercedilla</item>
+        <item>Cervera de Buitrago</item>
+        <item>Ciempozuelos</item>
+        <item>Cobeña</item>
+        <item>Collado Mediano</item>
+        <item>Collado Villalba</item>
+        <item>Colmenar de Oreja</item>
+        <item>Colmenar del Arroyo</item>
+        <item>Colmenarejo</item>
+        <item>Colmenar Viejo</item>
+        <item>Corpa</item>
+        <item>Coslada</item>
+        <item>Cubas de la Sagra</item>
+        <item>Chapinería</item>
+        <item>Chinchón</item>
+        <item>Daganzo de Arriba</item>
+        <item>Escorial, El</item>
+        <item>Estremera</item>
+        <item>Fresnedillas de la Oliva</item>
+        <item>Fresno de Torote</item>
+        <item>Fuenlabrada</item>
+        <item>Fuente el Saz de Jarama</item>
+        <item>Fuentidueña de Tajo</item>
+        <item>Galapagar</item>
+        <item>Garganta de los Montes</item>
+        <item>Gargantilla del Lozoya y Pinilla de Buitrago</item>
+        <item>Gascones</item>
+        <item>Getafe</item>
+        <item>Griñón</item>
+        <item>Guadalix de la Sierra</item>
+        <item>Guadarrama</item>
+        <item>Hiruela, La</item>
+        <item>Horcajo de la Sierra-Aoslos</item>
+        <item>Horcajuelo de la Sierra</item>
+        <item>Hoyo de Manzanares</item>
+        <item>Humanes de Madrid</item>
+        <item>Leganés</item>
+        <item>Loeches</item>
+        <item>Lozoya</item>
+        <item>Lozoyuela-Navas-Sieteiglesias</item>
+        <item>Madrid</item>
+        <item>Majadahonda</item>
+        <item>Manzanares el Real</item>
+        <item>Meco</item>
+        <item>Mejorada del Campo</item>
+        <item>Miraflores de la Sierra</item>
+        <item>Molar, El</item>
+        <item>Molinos, Los</item>
+        <item>Moraleja de Enmedio</item>
+        <item>Moralzarzal</item>
+        <item>Morata de Tajuña</item>
+        <item>Móstoles</item>
+        <item>Navacerrada</item>
+        <item>Navalafuente</item>
+        <item>Navalagamella</item>
+        <item>Navalcarnero</item>
+        <item>Navas del Rey</item>
+        <item>Nuevo Baztán</item>
+        <item>Olmeda de las Fuentes</item>
+        <item>Orusco de Tajuña</item>
+        <item>Paracuellos de Jarama</item>
+        <item>Parla</item>
+        <item>Patones</item>
+        <item>Pedrezuela</item>
+        <item>Pelayos de la Presa</item>
+        <item>Perales de Tajuña</item>
+        <item>Pezuela de las Torres</item>
+        <item>Pinto</item>
+        <item>Piñuécar-Gandullas</item>
+        <item>Pozuelo de Alarcón</item>
+        <item>Pozuelo del Rey</item>
+        <item>Prádena del Rincón</item>
+        <item>Puebla de la Sierra</item>
+        <item>Puentes Viejas</item>
+        <item>Quijorna</item>
+        <item>Rascafría</item>
+        <item>Redueña</item>
+        <item>Ribatejada</item>
+        <item>Rivas-Vaciamadrid</item>
+        <item>Robledillo de la Jara</item>
+        <item>Robledo de Chavela</item>
+        <item>Robregordo</item>
+        <item>Rozas de Madrid, Las</item>
+        <item>Rozas de Puerto Real</item>
+        <item>San Agustín del Guadalix</item>
+        <item>San Fernando de Henares</item>
+        <item>San Lorenzo de El Escorial</item>
+        <item>San Martín de la Vega</item>
+        <item>San Martín de Valdeiglesias</item>
+        <item>San Sebastián de los Reyes</item>
+        <item>Santa María de la Alameda</item>
+        <item>Santos de la Humosa, Los</item>
+        <item>Serranillos del Valle</item>
+        <item>Sevilla la Nueva</item>
+        <item>Sieteiglesias</item>
+        <item>Soto del Real</item>
+        <item>Talamanca de Jarama</item>
+        <item>Tielmes</item>
+        <item>Titulcia</item>
+        <item>Torrejón de Ardoz</item>
+        <item>Torrejón de la Calzada</item>
+        <item>Torrejón de Velasco</item>
+        <item>Torrelaguna</item>
+        <item>Torrelodones</item>
+        <item>Torremocha de Jarama</item>
+        <item>Torres de la Alameda</item>
+        <item>Valdaracete</item>
+        <item>Valdeavero</item>
+        <item>Valdelaguna</item>
+        <item>Valdemanco</item>
+        <item>Valdemorillo</item>
+        <item>Valdemoro</item>
+        <item>Valdeolmos-Alalpardo</item>
+        <item>Valdepiélagos</item>
+        <item>Valdetorres de Jarama</item>
+        <item>Valdilecha</item>
+        <item>Valverde de Alcalá</item>
+        <item>Velilla de San Antonio</item>
+        <item>Vellón, El</item>
+        <item>Venturada</item>
+        <item>Villaconejos</item>
+        <item>Villa del Prado</item>
+        <item>Villalbilla</item>
+        <item>Villamanrique de Tajo</item>
+        <item>Villamanta</item>
+        <item>Villamantilla</item>
+        <item>Villanueva de la Cañada</item>
+        <item>Villanueva de Perales</item>
+        <item>Villanueva del Pardillo</item>
+        <item>Villar del Olmo</item>
+        <item>Villarejo de Salvanés</item>
+        <item>Villaviciosa de Odón</item>
+        <item>Zarzalejo</item>
+
+    </string-array>
+</resources>

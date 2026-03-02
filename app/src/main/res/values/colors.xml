@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="naranja">#F36446</color>
+    <color name="calabaza">#FFA500</color>
+    <color name="lightsalmon">#FFA07A</color>
+    <color name="dorado">#FFD700</color>
+    <color name="amarillo">#FFFF00</color>
+    <color name="coral">#FF7F50</color>
+    <color name="lightcoral">#F08080</color>
+    <color name="lavander">#E6E6FA</color>
+    <color name="gray">#CCCCCC</color>
+    <color name="gray_light">#EEEEEE</color>
+</resources>

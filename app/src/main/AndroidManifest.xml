@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.byyourside">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <queries>
+        <package android:name="com.google.android.apps.maps" />
+
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/icono_app_splash"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/icono_app_splash_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ByYourSide"
+        tools:targetApi="31">
+        <activity
+            android:name=".OpcionesComercio"
+            android:exported="false" />
+        <activity
+            android:name=".ConsultarInventario"
+            android:exported="false" />
+        <activity
+            android:name=".ResultadoBusqueda"
+            android:exported="false" />
+        <activity
+            android:name=".AgregarProducto"
+            android:exported="false" />
+        <activity
+            android:name=".BuscarProducto"
+            android:exported="false" />
+        <activity
+            android:name=".RegistroCliente"
+            android:exported="false" />
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <!--
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="YOUR_API_KEY" />
+        -->
+        <activity
+            android:name=".RegistroComercio"
+            android:exported="false" />
+        <activity
+            android:name=".LoginCliente"
+            android:exported="false" />
+        <activity
+            android:name=".LoginComercio"
+            android:exported="false" />
+        <activity
+            android:name=".InicioApp"
+            android:exported="true"
+            android:theme="@style/Theme.ByYourSide">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
