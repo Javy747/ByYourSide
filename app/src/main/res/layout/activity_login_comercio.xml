@@ -121,6 +121,16 @@
                     android:textColor="@color/black"
                     android:textSize="25sp" />
 
+                <TextView
+                    android:id="@+id/tv_recuperar_contrasenha_comercio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pregunta_rc"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"/>
+
                 <Button
                     android:id="@+id/btn_login_comercio"
                     android:layout_width="match_parent"
@@ -133,6 +143,8 @@
                     android:text="@string/login"
                     android:textSize="18sp"
                     android:textColor="@color/white"/>
+
+        <!--
 
                 <Button
                     android:id="@+id/btn_login_email_comercio"
@@ -147,13 +159,15 @@
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
+                                                                                   -->
+
                 <TextView
                     android:id="@+id/tv_prengunta_login_comercio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/pregunta_registro_comercio"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
+                    android:textColor="@color/dark_gray"
                     android:textSize="16sp" />
 
                 <Button

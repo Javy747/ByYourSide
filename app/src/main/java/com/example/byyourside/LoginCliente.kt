@@ -26,13 +26,17 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import kotlinx.coroutines.launch
-
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.Window
+import android.widget.TextView
 
 class LoginCliente : AppCompatActivity(), VerificacionCampos {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var btnIniciarSesionCliente: Button
-    private lateinit var btnLoginEmailCliente: Button
+//  private lateinit var btnLoginEmailCliente: Button
     private val TAG = "LoginCliente"
 
 
@@ -58,7 +62,10 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
         val etContrasenhaCliente = findViewById<EditText>(R.id.et_contrasenha_cliente_login)
 
         btnIniciarSesionCliente = findViewById<Button>(R.id.btn_login_cliente)
-        btnLoginEmailCliente = findViewById(R.id.btn_login_email_cliente)
+    //  btnLoginEmailCliente = findViewById(R.id.btn_login_email_cliente)
+
+        val tvRecuperarContrasenha = findViewById<TextView>(R.id.tv_recuperar_contrasenha_cliente)
+
 
         val btnCrearCuentaCliente = findViewById<Button>(R.id.btn_crear_cuenta_cliente)
         val btnVolverIncio = findViewById<ImageView>(R.id.volver_inicio_cliente)
@@ -87,37 +94,41 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
 
         }
 
-        btnLoginEmailCliente.setOnClickListener {
+//        btnLoginEmailCliente.setOnClickListener {
+//
+//            val credentialManager = CredentialManager.create(this)
+//
+//            val googleIdOption = GetGoogleIdOption.Builder()
+//                .setFilterByAuthorizedAccounts(false)
+//                .setServerClientId(getString(R.string.default_web_client_id))
+//                .setAutoSelectEnabled(true)
+//                .build()
+//
+//            val request = GetCredentialRequest.Builder()
+//                .addCredentialOption(googleIdOption)
+//                .build()
+//
+//            lifecycleScope.launch {
+//                try {
+//                    val result = credentialManager.getCredential(
+//                        request = request,
+//                        context = this@LoginCliente
+//                    )
+//                    handleSignIn(result.credential)
+//                } catch (e : GetCredentialCancellationException) {
+//                    Log.d(TAG, "El usuario canceló el inicio de sesión con Google.")
+//                } catch (e : GetCredentialException){
+//                    Log.e (TAG, "Error obteniendo credencial: ${e.message}")
+//                    Toast.makeText(this@LoginCliente, "Error obteniendo credencial", Toast.LENGTH_SHORT).show()
+//                } catch (e : Exception){
+//                    Log.e(TAG, "Error inesperado")
+//                }
+//            }
+//
+//        }
 
-            val credentialManager = CredentialManager.create(this)
-
-            val googleIdOption = GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(false)
-                .setServerClientId(getString(R.string.default_web_client_id))
-                .setAutoSelectEnabled(true)
-                .build()
-
-            val request = GetCredentialRequest.Builder()
-                .addCredentialOption(googleIdOption)
-                .build()
-
-            lifecycleScope.launch {
-                try {
-                    val result = credentialManager.getCredential(
-                        request = request,
-                        context = this@LoginCliente
-                    )
-                    handleSignIn(result.credential)
-                } catch (e : GetCredentialCancellationException) {
-                    Log.d(TAG, "El usuario canceló el inicio de sesión con Google.")
-                } catch (e : GetCredentialException){
-                    Log.e (TAG, "Error obteniendo credencial: ${e.message}")
-                    Toast.makeText(this@LoginCliente, "Error obteniendo credencial", Toast.LENGTH_SHORT).show()
-                } catch (e : Exception){
-                    Log.e(TAG, "Error inesperado")
-                }
-            }
-
+        tvRecuperarContrasenha.setOnClickListener {
+            mostrarDialogoRecuperacion()
         }
 
         btnCrearCuentaCliente.setOnClickListener{
@@ -196,12 +207,60 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
             }
     }
 
+    private fun mostrarDialogoRecuperacion(){
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.dialog_recuperar_contrasenha)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val etCorreo = dialog.findViewById<EditText>(R.id.et_correo_recuperacion)
+        val btnEnviar = dialog.findViewById<Button>(R.id.btn_enviar_recuperacion)
+        val tvCancelar = dialog.findViewById<TextView>(R.id.tv_cancelar_recuperacion)
+
+        btnEnviar.setOnClickListener {
+            val email = etCorreo.text.toString().trim()
+
+            if(email.isEmpty()){
+                etCorreo.error = "Debes ingresar el correo del con el que registraste el comercio"
+                etCorreo.requestFocus()
+            } else if(!validarEmail(email)){
+                etCorreo.error = "El email debe tener el siguente formato: ejemplo27@example.com"
+                etCorreo.requestFocus()
+            } else {
+                enviarCorreoRecuperacion(email)
+                dialog.dismiss()
+            }
+        }
+
+        tvCancelar.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+
+    }
+
+    private fun enviarCorreoRecuperacion(email: String) {
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    Toast.makeText(this, "Correo enviado un correo de recuperación a dirección indicada", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Error al enviar el correo de recuperación", Toast.LENGTH_LONG).show()
+                }
+
+            }
+
+    }
+
     private fun updateUI(user : FirebaseUser?){
         if (user != null) {
             verificaryRedirigirCliente(user.uid)
         } else {
             btnIniciarSesionCliente.isEnabled = true
-            btnLoginEmailCliente.isEnabled = true
+//          btnLoginEmailCliente.isEnabled = true
         }
     }
 

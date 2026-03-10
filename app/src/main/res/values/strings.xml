@@ -95,6 +95,10 @@
     <string name="municipio">Municipio</string>
     <string name="login_email_comercio">Inicio con Google</string>
     <string name="login_email_cliente">Inicio con Google</string>
+    <string name="pregunta_rc">¿Has olvidado la contraseña?</string>
+    <string name="texto_recuperacion_comercio">Ingresa el correo de tu comercio o usuario para enviarte un enlace de recuperación.</string>
+    <string name="titulo_cd_recuperacion">Recuperar Contraseña</string>
+    <string name="hint_email_rc">ejemplo@gmail.com</string>
 
 
 </resources>

@@ -5,11 +5,8 @@
     <color name="naranja">#F36446</color>
     <color name="calabaza">#FFA500</color>
     <color name="lightsalmon">#FFA07A</color>
-    <color name="dorado">#FFD700</color>
-    <color name="amarillo">#FFFF00</color>
     <color name="coral">#FF7F50</color>
     <color name="lightcoral">#F08080</color>
-    <color name="lavander">#E6E6FA</color>
     <color name="gray">#CCCCCC</color>
-    <color name="gray_light">#EEEEEE</color>
+    <color name="dark_gray">#A9A9A9</color>
 </resources>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:backgroundTint="@color/white"
+    app:cardCornerRadius="30dp"
+    app:cardElevation="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="25dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/titulo_cd_recuperacion"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@string/texto_recuperacion_comercio"
+            android:textAlignment="center"
+            android:textColor="@color/dark_gray"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_correo_recuperacion"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/custom_edit_text"
+            android:drawableLeft="@drawable/home_asset"
+            android:drawablePadding="4dp"
+            android:hint="@string/hint_email_rc"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="5dp"
+            android:paddingRight="15dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:lines="1"
+            android:scrollHorizontally="true"
+            android:ellipsize="end" />
+
+        <Button
+            android:id="@+id/btn_enviar_recuperacion"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/coral"
+            android:text="Enviar Enlace"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_cancelar_recuperacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:textAlignment="center"
+            android:textColor="@color/dark_gray"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
