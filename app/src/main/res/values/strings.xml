@@ -99,6 +99,7 @@
     <string name="texto_recuperacion_comercio">Ingresa el correo de tu comercio o usuario para enviarte un enlace de recuperación.</string>
     <string name="titulo_cd_recuperacion">Recuperar Contraseña</string>
     <string name="hint_email_rc">ejemplo@gmail.com</string>
+    <string name="seleccionar_imagen">Subir imagen</string>
 
 
 </resources>

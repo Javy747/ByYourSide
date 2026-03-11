@@ -4,7 +4,6 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     alias(libs.plugins.kotlin.parcelize)
-  //  alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 android {
@@ -68,6 +67,7 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     // Coroutines de Kotlin con la versión estable más reciente
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")

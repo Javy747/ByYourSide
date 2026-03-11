@@ -1,7 +1,8 @@
 package com.example.byyourside
 
-
+import android.app.DatePickerDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -13,34 +14,61 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.appcompat.widget.Toolbar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+// import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class AgregarProducto : AppCompatActivity(), VerificacionCampos {
 
     private lateinit var producto: Producto
     private var auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
+//  private val storage = FirebaseFirestore.getInstance()
 
+    // Vistas
     private lateinit var etIdProducto: EditText
     private lateinit var etLoteProducto: EditText
     private lateinit var spinnerPaisProducto: Spinner
     private lateinit var etNombreProducto: EditText
     private lateinit var etMarcaProducto: EditText
     private lateinit var etPrecioProducto: EditText
+
+    // Nuevas vistas para Fecha e Imagen
+    private lateinit var etFechaCaducidad: EditText
+    private lateinit var ivImagenProducto: ImageView
+    private lateinit var btnSeleccionarImagen: Button
+
+    // Variables para guardar la selección del usuario
+    private var fechaSeleccionada: Date? = null
+    private var imagenSeleccionadaUri: Uri? = null
+
+//     Lanzador para abrir la galería de fotos
+//    private val seleccionarImagenLauncher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+//        if(uri != null){
+//            imagenSeleccionadaUri = uri
+//            ivImagenProducto.setImageURI(uri) // Mostramos la foto en pantalla
+//        }
+//    }
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +89,16 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
             insets
         }
 
+        // Inicializar vistas
         etIdProducto = findViewById(R.id.et_id_producto)
         etLoteProducto = findViewById(R.id.et_lote_producto)
         spinnerPaisProducto = findViewById(R.id.spr_pais_agregar_producto)
         etNombreProducto = findViewById(R.id.et_nombre_producto_registro)
         etMarcaProducto = findViewById(R.id.et_marca_producto_registro)
         etPrecioProducto = findViewById(R.id.et_precio_producto)
+        etFechaCaducidad = findViewById(R.id.etd_fecha_caducidad)
+        ivImagenProducto = findViewById(R.id.iv_imagen_producto)
+        btnSeleccionarImagen = findViewById(R.id.btn_seleccionar_imagen)
 
         val toolbarAgregarProducto = findViewById<Toolbar>(R.id.toolbar_agregar_producto)
         setSupportActionBar(toolbarAgregarProducto)
@@ -93,6 +125,17 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+//        // ACCIÓN: Abrir Calendario al tocar la fecha
+//        etFechaCaducidad.setOnClickListener {
+//            mostrarDatePicker()
+//        }
+//
+//        // ACCIÓN: Abrir Galería al tocar "Subir Foto"
+//        btnSeleccionarImagen.setOnClickListener {
+//            seleccionarImagenLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+//        }
+
+        // ACCIÓN: Botón Principal de Guardar
         btnAgregarProducto.setOnClickListener {
             val paisOrigenPosicion = spinnerPaisProducto.selectedItemPosition
             val lote = etLoteProducto.text.toString().trim()
@@ -109,6 +152,11 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
 
             if (paisOrigenPosicion == 0 || paisOrigenPosicion == 1) {
                 Toast.makeText(this, "Debes seleccionar un país de origen del producto válido", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (fechaSeleccionada == null) {
+                Toast.makeText(this, "Por favor, selecciona una fecha de caducidad", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -141,6 +189,7 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
                 return@setOnClickListener
             }
 
+            // Validación de Firestore (ID, Lote, Nombre/Marca)
             db.collection("inventario")
                 .whereEqualTo("idComercio", idComercio)
                 .whereEqualTo("idProducto", id)
