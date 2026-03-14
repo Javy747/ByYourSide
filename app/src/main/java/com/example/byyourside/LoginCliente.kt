@@ -36,20 +36,11 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var btnIniciarSesionCliente: Button
-//  private lateinit var btnLoginEmailCliente: Button
     private val TAG = "LoginCliente"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        auth = FirebaseAuth.getInstance()
-
-        if(auth.currentUser != null){
-            verificaryRedirigirCliente(auth.currentUser!!.uid)
-            return
-        }
-
         enableEdgeToEdge()
         setContentView(R.layout.activity_login_cliente)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -57,6 +48,11 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        auth = FirebaseAuth.getInstance()
+
+        val vistaPrincipal = findViewById<android.view.View>(android.R.id.content)
+        resetScrollEditText(vistaPrincipal)
 
         val etCorreoCliente = findViewById<EditText>(R.id.et_correo_cliente_login)
         val etContrasenhaCliente = findViewById<EditText>(R.id.et_contrasenha_cliente_login)
@@ -137,8 +133,8 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
         }
 
         btnVolverIncio.setOnClickListener{
-            val volverAlinicio = Intent(this, InicioApp::class.java)
-            startActivity(volverAlinicio)
+            val btnVolverInicio = Intent(this, InicioApp::class.java)
+            startActivity(btnVolverInicio)
         }
     }
 
@@ -288,6 +284,27 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
                 auth.signOut()
                 btnIniciarSesionCliente.isEnabled = true
             }
+    }
+
+    private fun resetScrollEditText(view: android.view.View) {
+        if( view is EditText){
+            view.onFocusChangeListener = android.view.View.OnFocusChangeListener { v, hasFocus ->
+                if(!hasFocus){
+                    v.post {
+                        view.scrollTo(0, 0)
+                        view.setSelection(0)
+
+                    }
+                }
+            }
+        }
+
+        if(view is android.view.ViewGroup){
+            for (i in 0 until view.childCount){
+                val vistaHija = view.getChildAt(i)
+                resetScrollEditText(vistaHija)
+            }
+        }
     }
 
 }

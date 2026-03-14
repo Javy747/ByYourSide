@@ -32,6 +32,9 @@ class RegistroCliente : AppCompatActivity(), VerificacionCampos {
 
         auth = FirebaseAuth.getInstance()
 
+        val vistaPrincipal = findViewById<android.view.View>(android.R.id.content)
+        resetScrollEditText(vistaPrincipal)
+
         val etNombreCliente = findViewById<EditText>(R.id.et_nombre_cliente_registro)
         val etApellidosCliente = findViewById<EditText>(R.id.et_apellido_cliente_registro)
         val etEmailCliente = findViewById<EditText>(R.id.et_email_cliente_registro)
@@ -137,6 +140,28 @@ class RegistroCliente : AppCompatActivity(), VerificacionCampos {
                     Toast.makeText(this, "Error: Usuario Existente", Toast.LENGTH_LONG).show()
                 }
             }
+
+    }
+
+    private fun resetScrollEditText(view: android.view.View) {
+        if( view is EditText){
+            view.onFocusChangeListener = android.view.View.OnFocusChangeListener { v, hasFocus ->
+                if(!hasFocus){
+                    v.post {
+                        view.scrollTo(0, 0)
+                        view.setSelection(0)
+
+                    }
+                }
+            }
+        }
+
+        if(view is android.view.ViewGroup){
+            for (i in 0 until view.childCount){
+                val vistaHija = view.getChildAt(i)
+                resetScrollEditText(vistaHija)
+            }
+        }
     }
 
 }

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:hint="ID del Producto (Editable)">
+        android:hint="@string/hint_id_producto">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_id_producto_manual"
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:hint="Lote">
+        android:hint="@string/hint_lote">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_lote_producto"
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:hint="País de Origen">
+        android:hint="@string/pais_origen_edit">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_pais_origen_producto"
@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:hint="Nombre del Producto">
+        android:hint="@string/hint_nombre_producto_edit">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_nombre_producto"
@@ -82,6 +82,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_fecha_caducidad">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etd_fecha_caducidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:focusable="false"
+            android:cursorVisible="false"
+            android:drawableEnd="@android:drawable/ic_menu_close_clear_cancel"
+            android:drawablePadding="10dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

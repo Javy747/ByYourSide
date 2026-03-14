@@ -52,6 +52,9 @@ class BuscarProducto : AppCompatActivity(), VerificacionCampos {
             insets
         }
 
+        val vistaPrincipal = findViewById<android.view.View>(android.R.id.content)
+        resetScrollEditText(vistaPrincipal)
+
         val toolbarBuscarProducto = findViewById<Toolbar>(R.id.toolbar_buscar_producto)
         setSupportActionBar(toolbarBuscarProducto)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -81,7 +84,7 @@ class BuscarProducto : AppCompatActivity(), VerificacionCampos {
                 val textView = view as? TextView
 
                 if (position == 0 || position == 1) {
-                    textView?.setTextColor(getColor(R.color.gray))
+                    textView?.setTextColor(getColor(R.color.light_gray))
                 } else {
                     textView?.setTextColor(getColor(R.color.black))
                 }
@@ -248,6 +251,28 @@ class BuscarProducto : AppCompatActivity(), VerificacionCampos {
                 }
                 startActivity(intent)
                 finish()
+            }
+        }
+    }
+
+
+    private fun resetScrollEditText(view: android.view.View) {
+        if( view is EditText){
+            view.onFocusChangeListener = android.view.View.OnFocusChangeListener { v, hasFocus ->
+                if(!hasFocus){
+                    v.post {
+                        view.scrollTo(0, 0)
+                        view.setSelection(0)
+
+                    }
+                }
+            }
+        }
+
+        if(view is android.view.ViewGroup){
+            for (i in 0 until view.childCount){
+                val vistaHija = view.getChildAt(i)
+                resetScrollEditText(vistaHija)
             }
         }
     }

@@ -57,6 +57,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation(libs.firebase.auth.ktx)
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
 
     implementation("androidx.activity:activity-ktx:1.10.1")
 
@@ -67,8 +69,6 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
-    implementation("com.google.firebase:firebase-storage-ktx")
-
     // Coroutines de Kotlin con la versión estable más reciente
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
@@ -77,7 +77,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.13.1")
 
     // Google Play Services para Mapas (sin especificar versión para que BoM las gestione)
-   // implementation(libs.play.services.maps)
+   implementation(libs.play.services.maps)
 
 
     // API SplashScreen

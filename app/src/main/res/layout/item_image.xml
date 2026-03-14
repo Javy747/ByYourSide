@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_margin="10dp">
+
+        <ImageView
+            android:id="@+id/iv_imagen_producto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            android:contentDescription="@string/seleccionar_imagen" />
+
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="4dp"
+            android:background="@color/coral"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:contentDescription="@string/eliminar_foto"
+            tools:ignore="TouchTargetSizeCheck" />
+
+</FrameLayout>

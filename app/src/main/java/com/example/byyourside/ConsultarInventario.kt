@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 class ConsultarInventario : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var productoAdapter: ProductoAdapter
+    private lateinit var productoHolderAdapter: ProductoHolderAdapter
     private val productosList = mutableListOf<Producto>()
     private lateinit var tvNoResultadosInv: TextView
     private val auth = FirebaseAuth.getInstance()
@@ -57,8 +57,8 @@ class ConsultarInventario : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recycler_inventario)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        productoAdapter = ProductoAdapter(productosList, idDelComercioActual)
-        recyclerView.adapter = productoAdapter
+        productoHolderAdapter = ProductoHolderAdapter(productosList, idDelComercioActual)
+        recyclerView.adapter = productoHolderAdapter
 
         val btnVolverOpcionesComercio = findViewById<ImageView>(R.id.inv_btn_volver_opciones_comercio)
 
@@ -95,7 +95,7 @@ class ConsultarInventario : AppCompatActivity() {
             onResultado = { productos ->
                 productosList.clear()
                 productosList.addAll(productos)
-                productoAdapter.notifyDataSetChanged()
+                productoHolderAdapter.notifyDataSetChanged()
 
                 if (productos.isEmpty()) {
                     tvNoResultadosInv.visibility = View.VISIBLE
