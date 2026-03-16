@@ -164,6 +164,23 @@
                         android:textSize="25sp" />
 
                     <EditText
+                        android:id="@+id/etd_fecha_caducidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/custom_edit_text"
+                        android:inputType="date"
+                        android:ems="10"
+                        android:hint="@string/hint_fecha_caducidad"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:textColor="@color/black"
+                        android:textSize="25sp"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:cursorVisible="false" />
+
+                    <EditText
                         android:id="@+id/et_precio_producto"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
@@ -178,32 +195,15 @@
                         android:textColor="@color/black"
                         android:textSize="25sp" />
 
-                    <EditText
-                        android:id="@+id/etd_fecha_caducidad"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/custom_edit_text"
-                        android:inputType="date"
-                        android:ems="10"
-                        android:hint="@string/hint_fecha_caducidad"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:textColor="@color/black"
-                        android:textSize="25sp"
-                        android:focusable="false"
-                        android:cursorVisible="false"
-                        android:drawableEnd="@android:drawable/ic_menu_close_clear_cancel"
-                        android:drawablePadding="10dp"/>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_imagenes"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/iv_imagen_producto"
+                        android:layout_width="120dp"
                         android:layout_height="120dp"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="20dp"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/item_image" />
+                        android:scaleType="centerCrop"
+                        android:background="@color/light_gray"
+                        android:src="@android:drawable/ic_menu_camera" />
 
                     <Button
                         android:id="@+id/btn_seleccionar_imagen"
