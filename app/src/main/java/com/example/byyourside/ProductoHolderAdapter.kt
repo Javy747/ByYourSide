@@ -1,8 +1,11 @@
 package com.example.byyourside
 
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -10,13 +13,20 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class ProductoAdapter(
+class ProductoHolderAdapter(
     private val productos: MutableList<Producto>,
     private val idComercio: String
-) : RecyclerView.Adapter<ProductoAdapter.ProductoViewHolder>() {
+) : RecyclerView.Adapter<ProductoHolderAdapter.ProductoViewHolder>() {
 
     class ProductoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // Referencias a los TextViews que muestran los datos del producto.
@@ -26,13 +36,16 @@ class ProductoAdapter(
         val nombre = view.findViewById<TextView>(R.id.tv_nombre_producto_iv)
         val marca = view.findViewById<TextView>(R.id.tv_marca_iv)
         val precio = view.findViewById<TextView>(R.id.tv_precio_producto_iv)
+        val fechaCaducidad = view.findViewById<TextView>(R.id.tv_fecha_caducidad_iv)
+
 
         val btnModificarProducto = view.findViewById<Button>(R.id.btn_modificar_producto)
         val btnEliminarProducto = view.findViewById<Button>(R.id.btn_eliminar_producto)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductoViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_inventario_comercio, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_consultar_inventario, parent, false)
         return ProductoViewHolder(view)
     }
 
@@ -46,6 +59,13 @@ class ProductoAdapter(
         holder.marca.text = producto.marca ?: "-"
         holder.precio.text = producto.precio?.let { "%.2f€".format(it) } ?: "-"
 
+        if (producto.fechaCaducidad != null) {
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            holder.fechaCaducidad.text = "${sdf.format(producto.fechaCaducidad!!)}"
+        } else {
+            holder.fechaCaducidad.text = "Sin caducidad"
+        }
+
         holder.btnModificarProducto.setOnClickListener {
             val context = holder.itemView.context
             val dialogView = LayoutInflater.from(context).inflate(R.layout.dialogo_modificar_producto, null)
@@ -56,6 +76,7 @@ class ProductoAdapter(
             val etNombre = dialogView.findViewById<EditText>(R.id.et_nombre_producto)
             val etMarca = dialogView.findViewById<EditText>(R.id.et_marca_producto)
             val etPrecio = dialogView.findViewById<EditText>(R.id.et_precio_producto)
+            val etFechaCaducidad = dialogView.findViewById<EditText>(R.id.et_fecha_caducidad_producto)
 
             etId.setText(producto.idProducto)
             etLote.setText(producto.lote)
@@ -63,6 +84,33 @@ class ProductoAdapter(
             etNombre.setText(producto.nombre)
             etMarca.setText(producto.marca)
             etPrecio.setText(producto.precio?.toString() ?: "")
+
+            if (producto.fechaCaducidad != null) {
+                etFechaCaducidad.setText(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(producto.fechaCaducidad!!))
+            } else {
+                etFechaCaducidad.setText("")
+            }
+
+            // Lógica para que funcione la "X" de borrar y el calendario (sin duplicarse)
+            etFechaCaducidad.setOnTouchListener { view, event ->
+                if (event.action == MotionEvent.ACTION_UP) {
+                    val drawableRight = 2
+                    val drawable = etFechaCaducidad.compoundDrawables[drawableRight]
+
+                    if (drawable != null && event.rawX >= (etFechaCaducidad.right - drawable.bounds.width() - etFechaCaducidad.paddingRight)) {
+                        etFechaCaducidad.text.clear()
+                        return@setOnTouchListener true
+                    } else {
+                        view.performClick()
+                        return@setOnTouchListener true
+                    }
+                }
+                false
+            }
+
+            etFechaCaducidad.setOnClickListener {
+                mostrarCalendarioEdicion(context, etFechaCaducidad)
+            }
 
             AlertDialog.Builder(context)
                 .setTitle("Modificar Producto")
@@ -75,13 +123,27 @@ class ProductoAdapter(
                     val nuevoNombre = etNombre.text.toString().trim()
                     val nuevoMarca = etMarca.text.toString().trim()
                     val nuevoPrecio = etPrecio.text.toString().toDoubleOrNull()
+                    val nuevaFechaCaducidadStr = etFechaCaducidad.text.toString().trim()
+
 
                     if (nuevoId.isBlank() || nuevoLote.isBlank() || nuevoPaisOrigen.isBlank() || nuevoNombre.isBlank() || nuevoMarca.isBlank() || nuevoPrecio == null) {
                         Toast.makeText(context, "Ningún campo puede quedar vacío", Toast.LENGTH_SHORT).show()
                         return@setPositiveButton
                     }
 
-                    verificarYActualizar(producto, nuevoId, nuevoLote, nuevoPaisOrigen, nuevoNombre, nuevoMarca, nuevoPrecio, holder)
+                    val nuevaFechaDate: Date? = if (nuevaFechaCaducidadStr.isBlank()) {
+                        null
+                    } else {
+                        try {
+                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(nuevaFechaCaducidadStr)
+                        } catch (e: Exception) {
+                            Log.e("AdapterFecha", "Error al parsear la fecha", e)
+                            Toast.makeText(context, "Formato de fecha incorrecto.", Toast.LENGTH_SHORT).show()
+                            return@setPositiveButton
+                        }
+                    }
+
+                    verificarYActualizar(producto, nuevoId, nuevoLote, nuevoPaisOrigen, nuevoNombre, nuevoMarca, nuevoPrecio, nuevaFechaDate, holder)
                 }
                 .show()
         }
@@ -141,6 +203,28 @@ class ProductoAdapter(
         }
     }
 
+    // Función auxiliar para mostrar el calendario desde el Adapter
+    private fun mostrarCalendarioEdicion(context: Context, editText: EditText) {
+        val activity = context as? AppCompatActivity ?: return
+
+        val constraintsBuilder = CalendarConstraints.Builder()
+            .setStart(MaterialDatePicker.todayInUtcMilliseconds())
+            .setValidator(DateValidatorPointForward.now())
+
+        val picker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Selecciona una fecha")
+            .setCalendarConstraints(constraintsBuilder.build())
+            .build()
+
+        picker.addOnPositiveButtonClickListener { timeInMillis ->
+            val fechaSeleccionada = Date(timeInMillis)
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            editText.setText(sdf.format(fechaSeleccionada))
+        }
+
+        picker.show(activity.supportFragmentManager, "DATE_PICKER_EDIT")
+    }
+
     private fun verificarYActualizar(
         producto: Producto,
         nuevoId: String,
@@ -149,6 +233,7 @@ class ProductoAdapter(
         nuevoNombre: String,
         nuevoMarca: String,
         nuevoPrecio: Double,
+        nuevaFechaCaducidad: Date?,
         holder: ProductoViewHolder
     ) {
         val db = FirebaseFirestore.getInstance()
@@ -202,7 +287,8 @@ class ProductoAdapter(
                                                 "paisProducto" to nuevoPais,
                                                 "nombreProducto" to nuevoNombre.lowercase(),
                                                 "marcaProducto" to nuevoMarca.lowercase(),
-                                                "precioProducto" to nuevoPrecio
+                                                "precioProducto" to nuevoPrecio,
+                                                "fechaCaducidad" to nuevaFechaCaducidad
                                             )
 
                                             val updatesProductos = mapOf(
@@ -211,7 +297,8 @@ class ProductoAdapter(
                                                 "pais" to nuevoPais,
                                                 "nombre" to nuevoNombre.lowercase(),
                                                 "marca" to nuevoMarca.lowercase(),
-                                                "precio" to nuevoPrecio
+                                                "precio" to nuevoPrecio,
+                                                "fechaCaducidad" to nuevaFechaCaducidad
                                             )
 
                                             val batch = db.batch()
@@ -234,6 +321,7 @@ class ProductoAdapter(
                                                         producto.nombre = nuevoNombre
                                                         producto.marca = nuevoMarca
                                                         producto.precio = nuevoPrecio
+                                                        producto.fechaCaducidad = nuevaFechaCaducidad
 
                                                         notifyItemChanged(holder.bindingAdapterPosition)
                                                         Toast.makeText(context, "Producto actualizado", Toast.LENGTH_SHORT).show()
@@ -265,3 +353,4 @@ class ProductoAdapter(
 
     override fun getItemCount(): Int = productos.size
 }
+

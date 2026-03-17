@@ -9,21 +9,21 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 
-class ComercioAdapter(
+class ResultadoBusquedaAdapter(
     private val comerciosList: List<InfoProductoComercioDTO>,
     private val onComoLlegarClicked: (String) -> Unit
-) : RecyclerView.Adapter<ComercioViewHolder>() {
+) : RecyclerView.Adapter<ResultadoBusquedaViewHolder>() {
 
     private lateinit var context: Context
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComercioViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultadoBusquedaViewHolder {
         context = parent.context
         val view = LayoutInflater.from(context)
             .inflate(R.layout.item_resultado_busqueda, parent, false)
-        return ComercioViewHolder(view)
+        return ResultadoBusquedaViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ComercioViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ResultadoBusquedaViewHolder, position: Int) {
         val comercio = comerciosList[position]
 
         holder.nombreComercioValor.text = comercio.nombreComercio ?: "Nombre no disponible"

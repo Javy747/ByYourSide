@@ -25,7 +25,7 @@
     <string name="hint_nombre_producto">Producto</string>
     <string name="hint_marca">Marca</string>
     <string name="hint_precio">Precio</string>
-    <string name="hint_fecha_caducidad">Caducidad YYYY-MM-DD</string>
+    <string name="hint_fecha_caducidad">Caducidad (Opcional)</string>
     <string name="agregar_producto">Agregar Producto</string>
     <string name="consultar_inventario">Consultar Inventario</string>
     <string name="buscar_producto">Buscar Producto</string>
@@ -100,6 +100,8 @@
     <string name="titulo_cd_recuperacion">Recuperar Contraseña</string>
     <string name="hint_email_rc">ejemplo@gmail.com</string>
     <string name="seleccionar_imagen">Subir imagen</string>
+    <string name="fecha_caducidad_inv">Fecha Caducidad:</string>
+    <string name="fecha_caducidad_inv_ej">DD/MM/YYYY</string>
 
 
 </resources>

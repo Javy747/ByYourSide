@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.byyourside"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.byyourside"
@@ -51,40 +51,41 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
 
     // Firebase BoM (Bill of Materials)
-    implementation(platform("com.google.firebase:firebase-bom:34.8.0")) // Versión actualizada y estable
+    implementation(platform("com.google.firebase:firebase-bom:34.10.0")) // Versión actualizada y estable
 
     // Productos de Firebase (sin especificar versión para que BoM las gestione)
     implementation("com.google.firebase:firebase-analytics")
     implementation(libs.firebase.auth.ktx)
     implementation("com.google.firebase:firebase-firestore")
 
-    implementation("androidx.activity:activity-ktx:1.10.1")
+    implementation("androidx.activity:activity-ktx:1.13.0")
 
     // Gestor de Librerías
-    implementation("androidx.credentials:credentials:1.3.0")
-    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("androidx.credentials:credentials:1.5.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.2.0")
 
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
-    implementation("com.google.firebase:firebase-storage-ktx")
+    //storage para futuras imagenes
+    //implementation("com.google.firebase:firebase-storage")
 
     // Coroutines de Kotlin con la versión estable más reciente
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 
     // Gson para serialización
-    implementation("com.google.code.gson:gson:2.13.1")
+    implementation("com.google.code.gson:gson:2.13.2")
 
     // Google Play Services para Mapas (sin especificar versión para que BoM las gestione)
    // implementation(libs.play.services.maps)
 
 
     // API SplashScreen
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.core:core-splashscreen:1.2.0")
 
     // RecyclerView
-    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+    implementation ("androidx.recyclerview:recyclerview:1.4.0")
 
 
     // Dependencias de Test

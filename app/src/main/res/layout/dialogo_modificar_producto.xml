@@ -84,4 +84,22 @@
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:hint="Fecha de caducidad">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_fecha_caducidad_producto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:focusable="false"
+            android:cursorVisible="false"
+            android:drawableEnd="@android:drawable/ic_menu_close_clear_cancel"
+            android:drawablePadding="10dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 </LinearLayout>

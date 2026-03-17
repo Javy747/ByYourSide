@@ -32,6 +32,9 @@ class RegistroCliente : AppCompatActivity(), VerificacionCampos {
 
         auth = FirebaseAuth.getInstance()
 
+        val vistaPrincipal = findViewById<android.view.View>(R.id.main)
+        resetScrollEnTodosLosEditText(vistaPrincipal)
+
         val etNombreCliente = findViewById<EditText>(R.id.et_nombre_cliente_registro)
         val etApellidosCliente = findViewById<EditText>(R.id.et_apellido_cliente_registro)
         val etEmailCliente = findViewById<EditText>(R.id.et_email_cliente_registro)
@@ -137,6 +140,31 @@ class RegistroCliente : AppCompatActivity(), VerificacionCampos {
                     Toast.makeText(this, "Error: Usuario Existente", Toast.LENGTH_LONG).show()
                 }
             }
+    }
+
+    private fun resetScrollEnTodosLosEditText(view: android.view.View) {
+        // Si la vista que estamos revisando es un EditText, le aplicamos el listener
+        if (view is EditText) {
+            view.onFocusChangeListener = android.view.View.OnFocusChangeListener { v, hasFocus ->
+                if (!hasFocus) {
+                    v.post {
+                        // Volvemos el scroll y el cursor al principio cuando pierde el foco
+                        view.scrollTo(0, 0)
+                        view.setSelection(0)
+                    }
+                }
+            }
+        }
+
+        // Si la vista es un contenedor (como tu ConstraintLayout o LinearLayout),
+        // revisamos todos los elementos que tiene dentro (sus hijos)
+        if (view is android.view.ViewGroup) {
+            for (i in 0 until view.childCount) {
+                val vistaHija = view.getChildAt(i)
+                // Llamada recursiva para revisar todo el árbol de vistas
+                resetScrollEnTodosLosEditText(vistaHija)
+            }
+        }
     }
 
 }

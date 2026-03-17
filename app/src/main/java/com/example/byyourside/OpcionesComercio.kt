@@ -68,24 +68,13 @@ class OpcionesComercio : AppCompatActivity() {
         // 1. Cerramos la sesión en Firebase (Cubre Email y Google)
         FirebaseAuth.getInstance().signOut()
 
-        // 2. Limpiamos el estado de Credential Manager (Específico para Google/Passkeys)
-        val credentialManager = CredentialManager.create(this)
-
-        lifecycleScope.launch {
-            try {
-                // Esto obliga a que la próxima vez Google pida elegir cuenta
-                credentialManager.clearCredentialState(ClearCredentialStateRequest())
-            } catch (e: Exception) {
-                Log.e("CierreSesion", "Error al limpiar credenciales: ${e.message}")
-            } finally {
-                // 3. Siempre redirigimos al inicio, falle o no la limpieza de credenciales
-                val intent = Intent(this@OpcionesComercio, InicioApp::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                startActivity(intent)
-                finish()
-            }
+        val intent = Intent(this@OpcionesComercio, InicioApp::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
+
+        startActivity(intent)
+        finish()
+
     }
 
 }

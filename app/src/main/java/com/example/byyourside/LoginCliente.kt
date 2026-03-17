@@ -36,7 +36,6 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var btnIniciarSesionCliente: Button
-//  private lateinit var btnLoginEmailCliente: Button
     private val TAG = "LoginCliente"
 
 
@@ -58,13 +57,13 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
             insets
         }
 
+        val vistaPrincipal = findViewById<android.view.View>(R.id.main)
+        resetScrollEnTodosLosEditText(vistaPrincipal)
+
         val etCorreoCliente = findViewById<EditText>(R.id.et_correo_cliente_login)
         val etContrasenhaCliente = findViewById<EditText>(R.id.et_contrasenha_cliente_login)
 
         btnIniciarSesionCliente = findViewById<Button>(R.id.btn_login_cliente)
-    //  btnLoginEmailCliente = findViewById(R.id.btn_login_email_cliente)
-
-        val tvRecuperarContrasenha = findViewById<TextView>(R.id.tv_recuperar_contrasenha_cliente)
 
 
         val btnCrearCuentaCliente = findViewById<Button>(R.id.btn_crear_cuenta_cliente)
@@ -94,43 +93,6 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
 
         }
 
-//        btnLoginEmailCliente.setOnClickListener {
-//
-//            val credentialManager = CredentialManager.create(this)
-//
-//            val googleIdOption = GetGoogleIdOption.Builder()
-//                .setFilterByAuthorizedAccounts(false)
-//                .setServerClientId(getString(R.string.default_web_client_id))
-//                .setAutoSelectEnabled(true)
-//                .build()
-//
-//            val request = GetCredentialRequest.Builder()
-//                .addCredentialOption(googleIdOption)
-//                .build()
-//
-//            lifecycleScope.launch {
-//                try {
-//                    val result = credentialManager.getCredential(
-//                        request = request,
-//                        context = this@LoginCliente
-//                    )
-//                    handleSignIn(result.credential)
-//                } catch (e : GetCredentialCancellationException) {
-//                    Log.d(TAG, "El usuario canceló el inicio de sesión con Google.")
-//                } catch (e : GetCredentialException){
-//                    Log.e (TAG, "Error obteniendo credencial: ${e.message}")
-//                    Toast.makeText(this@LoginCliente, "Error obteniendo credencial", Toast.LENGTH_SHORT).show()
-//                } catch (e : Exception){
-//                    Log.e(TAG, "Error inesperado")
-//                }
-//            }
-//
-//        }
-
-        tvRecuperarContrasenha.setOnClickListener {
-            mostrarDialogoRecuperacion()
-        }
-
         btnCrearCuentaCliente.setOnClickListener{
             val crearCuentaCliente = Intent(this, RegistroCliente::class.java)
             startActivity(crearCuentaCliente)
@@ -144,126 +106,17 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
 
     private fun loginCliente(email: String, contrasenha: String) {
         btnIniciarSesionCliente.isEnabled = false
-
         auth.signInWithEmailAndPassword(email, contrasenha)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser!! // No será nulo si la tarea fue exitosa
-                    val db = FirebaseFirestore.getInstance()
-
-                    db.collection("clientes").document(user.uid).get()
-                        .addOnSuccessListener { document ->
-                            if (document != null && document.exists()) {
-                                Log.d("LoginCliente", "Login exitoso. Usuario encontrado en la colección 'clientes'.")
-                                val intent = Intent(this, BuscarProducto::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                startActivity(intent)
-                                finish()
-                            } else {
-                                Log.w("LoginCliente", "Fallo de login. Usuario no encontrado en la colección 'clientes'.")
-                                Toast.makeText(this, "El usuario no es un cliente", Toast.LENGTH_LONG).show()
-                                auth.signOut()
-                                btnIniciarSesionCliente.isEnabled = true
-                            }
-                        }.addOnFailureListener { exception ->
-                            Toast.makeText(this, "Error al verificar usuario en la colección 'clientes'", Toast.LENGTH_LONG).show()
-                            auth.signOut()
-                            btnIniciarSesionCliente.isEnabled = true
-                        }
+                    verificaryRedirigirCliente(user.uid)
                 } else {
                     Toast.makeText(this, "Error de autenticación: El usuario o la contraseña no son correctos", Toast.LENGTH_LONG).show()
                     btnIniciarSesionCliente.isEnabled = true
                 }
             }
     }
-
-    private fun handleSignIn(credencial: Credential){
-        if(credencial is CustomCredential && credencial.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL){
-            try{
-                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credencial.data)
-                firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
-            } catch (e : Exception){
-                Log.e(TAG, "Error procesando token de Google", e)
-            }
-        } else {
-            Log.w(TAG, "Credential is not of type Google ID!")
-        }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if(task.isSuccessful){
-                    Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    updateUI(user)
-                } else {
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Toast.makeText(this, "Authenticación Fallida.", Toast.LENGTH_SHORT)
-                    updateUI(null)
-
-                }
-            }
-    }
-
-    private fun mostrarDialogoRecuperacion(){
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(true)
-        dialog.setContentView(R.layout.dialog_recuperar_contrasenha)
-
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        val etCorreo = dialog.findViewById<EditText>(R.id.et_correo_recuperacion)
-        val btnEnviar = dialog.findViewById<Button>(R.id.btn_enviar_recuperacion)
-        val tvCancelar = dialog.findViewById<TextView>(R.id.tv_cancelar_recuperacion)
-
-        btnEnviar.setOnClickListener {
-            val email = etCorreo.text.toString().trim()
-
-            if(email.isEmpty()){
-                etCorreo.error = "Debes ingresar el correo del con el que registraste el comercio"
-                etCorreo.requestFocus()
-            } else if(!validarEmail(email)){
-                etCorreo.error = "El email debe tener el siguente formato: ejemplo27@example.com"
-                etCorreo.requestFocus()
-            } else {
-                enviarCorreoRecuperacion(email)
-                dialog.dismiss()
-            }
-        }
-
-        tvCancelar.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.show()
-
-    }
-
-    private fun enviarCorreoRecuperacion(email: String) {
-        auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    Toast.makeText(this, "Correo enviado un correo de recuperación a dirección indicada", Toast.LENGTH_LONG).show()
-                } else {
-                    Toast.makeText(this, "Error al enviar el correo de recuperación", Toast.LENGTH_LONG).show()
-                }
-
-            }
-
-    }
-
-    private fun updateUI(user : FirebaseUser?){
-        if (user != null) {
-            verificaryRedirigirCliente(user.uid)
-        } else {
-            btnIniciarSesionCliente.isEnabled = true
-//          btnLoginEmailCliente.isEnabled = true
-        }
-    }
-
 
     private fun verificaryRedirigirCliente(uid : String){
 
@@ -288,6 +141,33 @@ class LoginCliente : AppCompatActivity(), VerificacionCampos {
                 auth.signOut()
                 btnIniciarSesionCliente.isEnabled = true
             }
+    }
+
+
+
+    private fun resetScrollEnTodosLosEditText(view: android.view.View) {
+        // Si la vista que estamos revisando es un EditText, le aplicamos el listener
+        if (view is EditText) {
+            view.onFocusChangeListener = android.view.View.OnFocusChangeListener { v, hasFocus ->
+                if (!hasFocus) {
+                    v.post {
+                        // Volvemos el scroll y el cursor al principio cuando pierde el foco
+                        view.scrollTo(0, 0)
+                        view.setSelection(0)
+                    }
+                }
+            }
+        }
+
+        // Si la vista es un contenedor (como tu ConstraintLayout o LinearLayout),
+        // revisamos todos los elementos que tiene dentro (sus hijos)
+        if (view is android.view.ViewGroup) {
+            for (i in 0 until view.childCount) {
+                val vistaHija = view.getChildAt(i)
+                // Llamada recursiva para revisar todo el árbol de vistas
+                resetScrollEnTodosLosEditText(vistaHija)
+            }
+        }
     }
 
 }

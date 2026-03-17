@@ -1,8 +1,7 @@
 package com.example.byyourside
 
-import android.app.DatePickerDialog
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -18,8 +17,6 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -28,12 +25,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-// import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -42,7 +40,6 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
     private lateinit var producto: Producto
     private var auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
-//  private val storage = FirebaseFirestore.getInstance()
 
     // Vistas
     private lateinit var etIdProducto: EditText
@@ -54,23 +51,13 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
 
     // Nuevas vistas para Fecha e Imagen
     private lateinit var etFechaCaducidad: EditText
-    private lateinit var ivImagenProducto: ImageView
-    private lateinit var btnSeleccionarImagen: Button
 
     // Variables para guardar la selección del usuario
     private var fechaSeleccionada: Date? = null
-    private var imagenSeleccionadaUri: Uri? = null
-
-//     Lanzador para abrir la galería de fotos
-//    private val seleccionarImagenLauncher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-//        if(uri != null){
-//            imagenSeleccionadaUri = uri
-//            ivImagenProducto.setImageURI(uri) // Mostramos la foto en pantalla
-//        }
-//    }
 
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -89,6 +76,15 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
             insets
         }
 
+        val toolbarAgregarProducto = findViewById<Toolbar>(R.id.toolbar_agregar_producto)
+        setSupportActionBar(toolbarAgregarProducto)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        val btnVolverOpcionesComercio = findViewById<ImageView>(R.id.btn_volver_opciones_comercio)
+
+        val vistaPrincipal = findViewById<android.view.View>(R.id.main)
+        resetScrollEnTodosLosEditText(vistaPrincipal)
+
         // Inicializar vistas
         etIdProducto = findViewById(R.id.et_id_producto)
         etLoteProducto = findViewById(R.id.et_lote_producto)
@@ -97,14 +93,7 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
         etMarcaProducto = findViewById(R.id.et_marca_producto_registro)
         etPrecioProducto = findViewById(R.id.et_precio_producto)
         etFechaCaducidad = findViewById(R.id.etd_fecha_caducidad)
-        ivImagenProducto = findViewById(R.id.iv_imagen_producto)
-        btnSeleccionarImagen = findViewById(R.id.btn_seleccionar_imagen)
 
-        val toolbarAgregarProducto = findViewById<Toolbar>(R.id.toolbar_agregar_producto)
-        setSupportActionBar(toolbarAgregarProducto)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        val btnVolverOpcionesComercio = findViewById<ImageView>(R.id.btn_volver_opciones_comercio)
         val btnAgregarProducto = findViewById<Button>(R.id.btn_agregar_producto)
 
         val paisProductoAdapter = ArrayAdapter.createFromResource(this, R.array.paises, android.R.layout.simple_spinner_item)
@@ -116,7 +105,7 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val textView = view as? TextView
                 if (position == 0 || position == 1) {
-                    textView?.setTextColor(getColor(R.color.gray))
+                    textView?.setTextColor(getColor(R.color.light_gray))
                 } else {
                     textView?.setTextColor(getColor(R.color.black))
                 }
@@ -125,15 +114,30 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-//        // ACCIÓN: Abrir Calendario al tocar la fecha
-//        etFechaCaducidad.setOnClickListener {
-//            mostrarDatePicker()
-//        }
-//
-//        // ACCIÓN: Abrir Galería al tocar "Subir Foto"
-//        btnSeleccionarImagen.setOnClickListener {
-//            seleccionarImagenLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-//        }
+        // ACCIÓN: Abrir Calendario al tocar la fecha
+        etFechaCaducidad.setOnTouchListener { view, event ->
+            if (event.action == android.view.MotionEvent.ACTION_UP) {
+                val drawableRight = 2
+                val drawable = etFechaCaducidad.compoundDrawables[drawableRight]
+
+                // 1. Si tocó la "X" para borrar
+                if (drawable != null && event.rawX >= (etFechaCaducidad.right - drawable.bounds.width() - etFechaCaducidad.paddingRight)) {
+                    etFechaCaducidad.text.clear()
+                    fechaSeleccionada = null // Borramos la fecha para que se guarde como null
+                    return@setOnTouchListener true
+                }
+                // 2. Si tocó en cualquier otra parte del campo (para abrir el calendario)
+                else {
+                    view.performClick() // Esto llama al setOnClickListener
+                    return@setOnTouchListener true // Evita que se abra dos veces
+                }
+            }
+            false
+        }
+
+        etFechaCaducidad.setOnClickListener {
+            showDatePicker()
+        }
 
         // ACCIÓN: Botón Principal de Guardar
         btnAgregarProducto.setOnClickListener {
@@ -152,11 +156,6 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
 
             if (paisOrigenPosicion == 0 || paisOrigenPosicion == 1) {
                 Toast.makeText(this, "Debes seleccionar un país de origen del producto válido", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (fechaSeleccionada == null) {
-                Toast.makeText(this, "Por favor, selecciona una fecha de caducidad", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -225,7 +224,8 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
                                                     pais = pais,
                                                     nombre = nombre,
                                                     marca = marca,
-                                                    precio = precio
+                                                    precio = precio,
+                                                    fechaCaducidad = fechaSeleccionada
                                                 )
                                                 agregarProducto(producto, idComercio)
                                             }
@@ -270,6 +270,27 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
         }
     }
 
+    private fun showDatePicker() {
+        // 1. Configuramos las restricciones
+        val constraintsBuilder = CalendarConstraints.Builder()
+            .setStart(MaterialDatePicker.todayInUtcMilliseconds()) // Bloquea todo lo anterior a hoy
+            .setValidator(DateValidatorPointForward.now()) // Solo permite fechas futuras
+
+        // 2. Se lo pasamos al Builder del DatePicker
+        val picker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Selecciona una fecha")
+            .setCalendarConstraints(constraintsBuilder.build())
+            .build()
+
+        picker.addOnPositiveButtonClickListener { timeInMillis ->
+            fechaSeleccionada = Date(timeInMillis)
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            etFechaCaducidad.setText(sdf.format(fechaSeleccionada!!))
+        }
+
+        picker.show(supportFragmentManager, "DATE_PICKER")
+    }
+
     private fun agregarProducto(producto: Producto, idComercio: String) {
         db.collection("comercios").document(idComercio).get()
             .addOnSuccessListener { document ->
@@ -289,7 +310,8 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
                     "pais" to producto.pais,
                     "nombre" to producto.nombre?.lowercase(),
                     "marca" to producto.marca?.lowercase(),
-                    "precio" to producto.precio
+                    "precio" to producto.precio,
+                    "fechaCaducidad" to producto.fechaCaducidad
                 )
 
                 val inventarioRef = db.collection("inventario").document()
@@ -303,9 +325,9 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
                     "precioProducto" to producto.precio,
                     "idComercio" to idComercio,
                     "nombreComercio" to nombreComercio,
-                    "paisProducto" to producto.pais
+                    "paisProducto" to producto.pais,
+                    "fechaCaducidad" to producto.fechaCaducidad
                 )
-
 
                     val batch = db.batch()
                     batch.set(productoRef, productoData)
@@ -320,6 +342,8 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
                             etMarcaProducto.text.clear()
                             etPrecioProducto.text.clear()
                             spinnerPaisProducto.setSelection(0)
+                            etFechaCaducidad.text.clear()
+                            fechaSeleccionada = null
                         }
                         .addOnFailureListener { e ->
                             Log.w("Firestore", "Error al agregar producto en batch", e)
@@ -333,25 +357,40 @@ class AgregarProducto : AppCompatActivity(), VerificacionCampos {
     }
 
     private fun cerrarSesion() {
-        // 1. Cerramos la sesión en Firebase (Cubre Email y Google)
+        // Cerrar sesión en Firebase Authentication
         FirebaseAuth.getInstance().signOut()
 
-        // 2. Limpiamos el estado de Credential Manager (Específico para Google/Passkeys)
-        val credentialManager = CredentialManager.create(this)
+         val intent = Intent(this@AgregarProducto, InicioApp::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+         }
 
-        lifecycleScope.launch {
-            try {
-                // Esto obliga a que la próxima vez Google pida elegir cuenta
-                credentialManager.clearCredentialState(ClearCredentialStateRequest())
-            } catch (e: Exception) {
-                Log.e("CierreSesion", "Error al limpiar credenciales: ${e.message}")
-            } finally {
-                // 3. Siempre redirigimos al inicio, falle o no la limpieza de credenciales
-                val intent = Intent(this@AgregarProducto, InicioApp::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+
+    }
+
+
+    private fun resetScrollEnTodosLosEditText(view: android.view.View) {
+        // Si la vista que estamos revisando es un EditText, le aplicamos el listener
+        if (view is EditText) {
+            view.onFocusChangeListener = android.view.View.OnFocusChangeListener { v, hasFocus ->
+                if (!hasFocus) {
+                    v.post {
+                        // Volvemos el scroll y el cursor al principio cuando pierde el foco
+                        view.scrollTo(0, 0)
+                        view.setSelection(0)
+                    }
                 }
-                startActivity(intent)
-                finish()
+            }
+        }
+
+        // Si la vista es un contenedor (como tu ConstraintLayout o LinearLayout),
+        // revisamos todos los elementos que tiene dentro (sus hijos)
+        if (view is android.view.ViewGroup) {
+            for (i in 0 until view.childCount) {
+                val vistaHija = view.getChildAt(i)
+                // Llamada recursiva para revisar todo el árbol de vistas
+                resetScrollEnTodosLosEditText(vistaHija)
             }
         }
     }

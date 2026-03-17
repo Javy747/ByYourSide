@@ -117,6 +117,8 @@
                     android:textColor="@color/black"
                     android:textSize="25sp" />
 
+
+            <!--
                 <TextView
                     android:id="@+id/tv_recuperar_contrasenha_cliente"
                     android:layout_width="match_parent"
@@ -126,6 +128,8 @@
                     android:textColor="@color/dark_gray"
                     android:textSize="16sp"
                     android:layout_marginTop="10dp"/>
+
+            -->
 
                 <Button
                     android:id="@+id/btn_login_cliente"

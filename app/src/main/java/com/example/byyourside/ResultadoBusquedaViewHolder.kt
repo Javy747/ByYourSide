@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class ComercioViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class ResultadoBusquedaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     val nombreComercio: TextView = itemView.findViewById(R.id.nombre_comercio_rb)
     val nombreComercioValor: TextView = itemView.findViewById(R.id.nombre_comercio_rbv)

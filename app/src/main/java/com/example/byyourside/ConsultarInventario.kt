@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 class ConsultarInventario : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var productoAdapter: ProductoAdapter
+    private lateinit var productoHolderAdapter: ProductoHolderAdapter
     private val productosList = mutableListOf<Producto>()
     private lateinit var tvNoResultadosInv: TextView
     private val auth = FirebaseAuth.getInstance()
@@ -54,13 +54,13 @@ class ConsultarInventario : AppCompatActivity() {
         val toolbarInventario = findViewById<Toolbar>(R.id.toolbar_inventario)
         setSupportActionBar(toolbarInventario)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        val btnVolverOpcionesComercio = findViewById<ImageView>(R.id.inv_btn_volver_opciones_comercio)
+
 
         recyclerView = findViewById(R.id.recycler_inventario)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        productoAdapter = ProductoAdapter(productosList, idDelComercioActual)
-        recyclerView.adapter = productoAdapter
-
-        val btnVolverOpcionesComercio = findViewById<ImageView>(R.id.inv_btn_volver_opciones_comercio)
+        productoHolderAdapter = ProductoHolderAdapter(productosList, idDelComercioActual)
+        recyclerView.adapter = productoHolderAdapter
 
         tvNoResultadosInv = findViewById(R.id.tvNoResultadosInv)
 
@@ -95,7 +95,7 @@ class ConsultarInventario : AppCompatActivity() {
             onResultado = { productos ->
                 productosList.clear()
                 productosList.addAll(productos)
-                productoAdapter.notifyDataSetChanged()
+                productoHolderAdapter.notifyDataSetChanged()
 
                 if (productos.isEmpty()) {
                     tvNoResultadosInv.visibility = View.VISIBLE
@@ -228,23 +228,13 @@ class ConsultarInventario : AppCompatActivity() {
         // 1. Cerramos la sesión en Firebase (Cubre Email y Google)
         FirebaseAuth.getInstance().signOut()
 
-        // 2. Limpiamos el estado de Credential Manager (Específico para Google/Passkeys)
-        val credentialManager = CredentialManager.create(this)
-
-        lifecycleScope.launch {
-            try {
-                // Esto obliga a que la próxima vez Google pida elegir cuenta
-                credentialManager.clearCredentialState(ClearCredentialStateRequest())
-            } catch (e: Exception) {
-                Log.e("CierreSesion", "Error al limpiar credenciales: ${e.message}")
-            } finally {
-                // 3. Siempre redirigimos al inicio, falle o no la limpieza de credenciales
-                val intent = Intent(this@ConsultarInventario, InicioApp::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                startActivity(intent)
-                finish()
-            }
+        val intent = Intent(this@ConsultarInventario, InicioApp::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
+
+        startActivity(intent)
+        finish()
+
+
     }
 }

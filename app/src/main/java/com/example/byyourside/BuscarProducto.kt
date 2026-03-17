@@ -56,6 +56,9 @@ class BuscarProducto : AppCompatActivity(), VerificacionCampos {
         setSupportActionBar(toolbarBuscarProducto)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        val vistaPrincipal = findViewById<android.view.View>(R.id.main)
+        resetScrollEnTodosLosEditText(vistaPrincipal)
+
         val spinner = findViewById<Spinner>(R.id.spr_pais_buscar_producto)
         val etMarcaProducto = findViewById<EditText>(R.id.et_marca_producto_busqueda)
         val etNombreProducto = findViewById<EditText>(R.id.et_nombre_producto_busqueda)
@@ -232,22 +235,37 @@ class BuscarProducto : AppCompatActivity(), VerificacionCampos {
         // 1. Cerramos la sesión en Firebase (Cubre Email y Google)
         FirebaseAuth.getInstance().signOut()
 
-        // 2. Limpiamos el estado de Credential Manager (Específico para Google/Passkeys)
-        val credentialManager = CredentialManager.create(this)
+        val intent = Intent(this@BuscarProducto, InicioApp::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
 
-        lifecycleScope.launch {
-            try {
-                // Esto obliga a que la próxima vez Google pida elegir cuenta
-                credentialManager.clearCredentialState(ClearCredentialStateRequest())
-            } catch (e: Exception) {
-                Log.e("CierreSesion", "Error al limpiar credenciales: ${e.message}")
-            } finally {
-                // 3. Siempre redirigimos al inicio, falle o no la limpieza de credenciales
-                val intent = Intent(this@BuscarProducto, InicioApp::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+
+
+    }
+
+    private fun resetScrollEnTodosLosEditText(view: android.view.View) {
+        // Si la vista que estamos revisando es un EditText, le aplicamos el listener
+        if (view is EditText) {
+            view.onFocusChangeListener = android.view.View.OnFocusChangeListener { v, hasFocus ->
+                if (!hasFocus) {
+                    v.post {
+                        // Volvemos el scroll y el cursor al principio cuando pierde el foco
+                        view.scrollTo(0, 0)
+                        view.setSelection(0)
+                    }
                 }
-                startActivity(intent)
-                finish()
+            }
+        }
+
+        // Si la vista es un contenedor (como tu ConstraintLayout o LinearLayout),
+        // revisamos todos los elementos que tiene dentro (sus hijos)
+        if (view is android.view.ViewGroup) {
+            for (i in 0 until view.childCount) {
+                val vistaHija = view.getChildAt(i)
+                // Llamada recursiva para revisar todo el árbol de vistas
+                resetScrollEnTodosLosEditText(vistaHija)
             }
         }
     }

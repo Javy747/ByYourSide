@@ -38,6 +38,9 @@ class RegistroComercio : AppCompatActivity(), VerificacionCampos {
 
         auth = FirebaseAuth.getInstance()
 
+        val vistaPrincipal = findViewById<android.view.View>(R.id.main)
+        resetScrollEnTodosLosEditText(vistaPrincipal)
+
         val etNifComercio = findViewById<EditText>(R.id.et_nif_comercio_registro)
         val etNombreComercio = findViewById<EditText>(R.id.et_nombre_comercio_registro)
 
@@ -128,7 +131,7 @@ class RegistroComercio : AppCompatActivity(), VerificacionCampos {
                 val textView = view as? TextView
 
                 if (position == 0 || position == 1) {
-                    textView?.setTextColor(getColor(R.color.gray))
+                    textView?.setTextColor(getColor(R.color.light_gray))
                 } else {
                     textView?.setTextColor(getColor(R.color.black))
                 }
@@ -393,6 +396,31 @@ class RegistroComercio : AppCompatActivity(), VerificacionCampos {
                         Toast.makeText(this, "Error: Usuario Existente", Toast.LENGTH_LONG).show()
                     }
                 }
+    }
+
+    private fun resetScrollEnTodosLosEditText(view: android.view.View) {
+        // Si la vista que estamos revisando es un EditText, le aplicamos el listener
+        if (view is EditText) {
+            view.onFocusChangeListener = android.view.View.OnFocusChangeListener { v, hasFocus ->
+                if (!hasFocus) {
+                    v.post {
+                        // Volvemos el scroll y el cursor al principio cuando pierde el foco
+                        view.scrollTo(0, 0)
+                        view.setSelection(0)
+                    }
+                }
+            }
+        }
+
+        // Si la vista es un contenedor (como tu ConstraintLayout o LinearLayout),
+        // revisamos todos los elementos que tiene dentro (sus hijos)
+        if (view is android.view.ViewGroup) {
+            for (i in 0 until view.childCount) {
+                val vistaHija = view.getChildAt(i)
+                // Llamada recursiva para revisar todo el árbol de vistas
+                resetScrollEnTodosLosEditText(vistaHija)
+            }
+        }
     }
 
 }
